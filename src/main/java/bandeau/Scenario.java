@@ -1,4 +1,5 @@
 package bandeau;
+
 import java.util.List;
 import java.util.LinkedList;
 
@@ -20,7 +21,7 @@ class ScenarioElement {
  * Un scenario sait se jouer sur un bandeau.
  */
 public class Scenario {
-
+public Bandeau b;
     private final List<ScenarioElement> myElements = new LinkedList<>();
 
     /**
@@ -31,6 +32,7 @@ public class Scenario {
      */
     public void addEffect(Effect e, int repeats) {
         myElements.add(new ScenarioElement(e, repeats));
+        
     }
 
     /**
@@ -39,10 +41,29 @@ public class Scenario {
      * @param b le bandeau ou s'afficher.
      */
     public void playOn(Bandeau b) {
-        for (ScenarioElement element : myElements) {
+       /* for (ScenarioElement element : myElements) {
             for (int repeats = 0; repeats < element.repeats; repeats++) {
                 element.effect.playOn(b);
             }
+        }*/
+        ScenarioPlayer s=new ScenarioPlayer(b);
+        s.start();
+    }
+
+    public class ScenarioPlayer extends Thread{
+        private Bandeau b1;
+        //constructor
+        public ScenarioPlayer(Bandeau b){
+            this.b1=b;
+        }
+        @Override
+        public void run(){
+            for(ScenarioElement element:myElements){
+                for(int repeats=0;repeats< element.repeats;repeats++){
+                    element.effect.playOn(this.b1);
+                }
+            }
         }
     }
+
 }
